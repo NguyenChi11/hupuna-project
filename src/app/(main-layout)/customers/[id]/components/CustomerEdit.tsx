@@ -98,7 +98,10 @@ export default function CustomerEdit({ id }: CustomerEditProps) {
           <CustomerAvatarSection
             avatarPreview={avatarPreview}
             customerName={formData.name}
-            onAvatarChange={handleAvatarChange}
+            onUploaded={(url) => {
+              setAvatarPreview(url);
+              handleInputChange("avatar", url);
+            }}
             isEditMode
           />
 

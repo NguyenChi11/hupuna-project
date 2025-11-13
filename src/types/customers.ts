@@ -56,3 +56,18 @@ export interface CustomerTableRowProps {
   isSelected: boolean;
   onSelectRow: (id: string) => void;
 }
+
+// src/types/table.ts hoặc src/types/customers.ts
+export interface CustomerTableFooterProps {
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  onPageChange: (page: number) => void;
+  onItemsPerPageChange: (count: number) => void;
+  allColumns: Record<string, string>;
+  tempFilters: Record<string, string[]>;
+  tempVisibleColumns: Record<string, boolean>;
+  onFilterChange: (filterName: string, values: string[]) => void;
+  onColumnToggle: (columnKey: string) => void;
+  onApplyFilters: () => void;
+}
