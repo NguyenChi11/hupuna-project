@@ -1,4 +1,3 @@
-"use client";
 
 import { FormGrid } from "@/components/layouts/Form/FormGrid";
 import { InputField } from "@/components/layouts/Form/InputField";
