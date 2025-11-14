@@ -12,12 +12,14 @@ import {
   faChartBar,
   faChevronLeft,
   faChevronRight,
+  faAddressBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSidebar } from "@/app/(main-layout)/_components/SidebarContext";
-
+import BookIcon from "@/components/images/BookIcon";
 const routes = [
   { label: "Trang Chủ", href: "/home", icon: faHouse },
   { label: "Khách Hàng", href: "/customers", icon: faUsers },
+  { label: "Nhân viên", href: "/employee-account", icon: faAddressBook },
   { label: "Marketing", href: "/marketing", icon: faBullhorn },
   { label: "API", href: "/api", icon: faCode },
   { label: "Công việc", href: "/tasks", icon: faTasks },
@@ -42,6 +44,7 @@ export default function Sidebar() {
         ${collapsed ? "w-16" : "sm:w-64 w-full"}
       `}
     >
+
       {/* Header */}
       <div className="flex h-16 items-center justify-between border-b px-4">
         {!collapsed && (
