@@ -47,6 +47,7 @@ export function GenericTableBody<T extends { id: string }>({
                 <Checkbox
                   checked={isSelected}
                   onChange={() => onSelectRow(id)}
+                  id={`checkbox-${id}`}
                 />
               </td>
             )}

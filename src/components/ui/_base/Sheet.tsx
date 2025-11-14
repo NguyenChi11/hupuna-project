@@ -19,7 +19,7 @@ export function Sheet({ isOpen, onClose, title, children }: SheetProps) {
       <div className="relative w-full max-w-md bg-white shadow-2xl animate-in slide-in-from-right">
         <div className="flex items-center justify-between border-b border-gray-200 p-4">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-          <Button variant="icon" onClick={onClose}>
+          <Button variant="secondary" onClick={onClose}>
             <FontAwesomeIcon icon={faXmark} className="h-4 w-4 text-gray-500" />
           </Button>
         </div>

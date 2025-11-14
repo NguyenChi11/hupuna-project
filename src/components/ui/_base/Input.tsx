@@ -2,15 +2,15 @@ import { InputHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  iconLeft?: React.ReactNode;
+  icon?: React.ReactNode; // Đổi từ iconLeft thành icon (phù hợp với tên gọi trong usage)
 }
 
-export function Input({ className, iconLeft, ...props }: InputProps) {
+export function Input({ className, icon, ...props }: InputProps) {
   return (
     <div className="relative">
-      {iconLeft && (
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400">
-          {iconLeft}
+      {icon && (
+        <div className="pointer-events-none absolute left-3 top-2/5 -translate-y-1/2 h-4 w-4 text-gray-400">
+          {icon}
         </div>
       )}
       <input
@@ -19,7 +19,7 @@ export function Input({ className, iconLeft, ...props }: InputProps) {
           "bg-white text-gray-900 placeholder:text-gray-400",
           "focus:outline-none focus:ring-2 focus:ring-[#111164]/20 focus:border-[#111164]",
           "transition-all duration-200",
-          iconLeft ? "pl-10" : "",
+          icon ? "pl-10" : "pl-3",
           className
         )}
         {...props}
