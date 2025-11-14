@@ -12,12 +12,13 @@ import {
   faChartBar,
   faChevronLeft,
   faChevronRight,
+  faAddressBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSidebar } from "@/app/(main-layout)/_components/SidebarContext";
-
 const routes = [
   { label: "Trang Chủ", href: "/home", icon: faHouse },
   { label: "Khách Hàng", href: "/customers", icon: faUsers },
+  { label: "Nhân viên", href: "/employee-account", icon: faAddressBook },
   { label: "Marketing", href: "/marketing", icon: faBullhorn },
   { label: "API", href: "/api", icon: faCode },
   { label: "Công việc", href: "/tasks", icon: faTasks },
