@@ -1,4 +1,8 @@
 export interface Customer {
+  website: string;
+  taxCode: string;
+  lastPurchase: string;
+  avatarUrl: string | undefined;
   id: string;
   customerId: string;
   name: string;

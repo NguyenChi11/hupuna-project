@@ -92,6 +92,7 @@ export function GenericTableFooter({
             onPageChange(1);
           }}
           options={itemsPerPageOptions}
+          dropdownClassName="bottom-10"
           placeholder="Số kết quả"
           className="w-36"
         />

@@ -22,22 +22,9 @@ export function ActionButtons({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2 justify-end">
-        <IconButton
-          icon={faCommentDots}
-          title="Tin nhắn"
-          onClick={onMessageClick}
-        />
-        <IconButton
-          icon={faBell}
-          title="Thông báo"
-          badge
-          onClick={onNotificationClick}
-        />
-        <IconButton
-          icon={faRocket}
-          title="Getfly CRM"
-          onClick={onGetflyClick}
-        />
+        <IconButton icon={faCommentDots} onClick={onMessageClick} />
+        <IconButton icon={faBell} onClick={onNotificationClick} />
+        <IconButton icon={faRocket} onClick={onGetflyClick} />
       </div>
 
       <Button
