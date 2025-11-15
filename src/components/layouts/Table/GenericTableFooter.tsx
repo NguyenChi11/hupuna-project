@@ -6,9 +6,9 @@ import { faCog, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { TableFooterProps } from "@/types/table";
 import { Pagination } from "@/components/ui/_base/Pagination";
-import { Button } from "@/components/ui/_base/Button";
 import { Popover } from "@/components/ui/_base/Popover";
 import { Select } from "@/components/ui/_base/Select";
+import {Button} from "@/components/ui/_base/Button";
 
 const itemsPerPageOptions = [
   { value: "10", label: "10 kết quả" },
