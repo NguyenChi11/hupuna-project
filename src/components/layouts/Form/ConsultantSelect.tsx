@@ -24,7 +24,7 @@ export function ConsultantSelect({
         value={value}
         onChange={onChange}
         placeholder="Chọn nhân viên tư vấn"
-        options={CONSULTANTS}
+        options={[...CONSULTANTS]}
       />
     </div>
   );

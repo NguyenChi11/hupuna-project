@@ -3,7 +3,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 interface CheckboxProps {
   checked: boolean;
-  onChange: () => void;
+  onChange: (checked: boolean) => void;
   label?: string;
   id: string;
 }
@@ -18,7 +18,7 @@ export function Checkbox({ checked, onChange, label, id }: CheckboxProps) {
         type="checkbox"
         id={id}
         checked={checked}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.checked)}
         className="sr-only peer"
       />
       <div
