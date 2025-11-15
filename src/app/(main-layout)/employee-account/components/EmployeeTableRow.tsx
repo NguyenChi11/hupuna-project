@@ -1,5 +1,3 @@
-"use client";
-
 import { DefaultCell } from "@/components/layouts/Table/GenericTableRow/DefaultCell";
 import { NameWithAvatarCell } from "@/components/layouts/Table/GenericTableRow/NameWithAvatarCell";
 import { RowCheckbox } from "@/components/layouts/Table/GenericTableRow/RowCheckbox";
