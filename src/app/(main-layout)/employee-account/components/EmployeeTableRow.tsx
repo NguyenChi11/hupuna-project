@@ -23,6 +23,7 @@ export function EmployeeTableRow({
             {/* Checkbox */}
             {visibleColumns.checkbox && (
                 <RowCheckbox
+                    rowId={employee.id}
                     checked={isSelected}
                     onChange={() => onSelectRow(employee.id)}
                 />
@@ -40,7 +41,7 @@ export function EmployeeTableRow({
                         <NameWithAvatarCell
                             key={key}
                             name={employee.fullName || "-"}
-                            // avatar={employee.avatar}
+                            avatar={employee.avatar}
                             href={`/customers/${employee.id}`}
                         />
                     );
