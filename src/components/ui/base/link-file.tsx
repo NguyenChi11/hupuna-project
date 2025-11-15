@@ -1,7 +1,7 @@
 "use client";
 
+import { ButtonBase } from "@/components/ui/base/button";
 import React, { useState, useEffect } from "react";
-import { ButtonBase } from "@/app/ui/base/button";
 
 interface FileLinksSectionProps {
   defaultLinks?: string[];
@@ -16,6 +16,7 @@ export default function FileLinksSection({
 
   useEffect(() => {
     if (Array.isArray(defaultLinks)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLinks(defaultLinks);
     }
   }, [defaultLinks]);

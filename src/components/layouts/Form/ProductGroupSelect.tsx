@@ -24,7 +24,7 @@ export function ProductGroupSelect({
         value={value}
         onChange={onChange}
         placeholder="Chọn nhóm sản phẩm"
-        options={PRODUCT_GROUPS}
+        options={[...PRODUCT_GROUPS]}
       />
     </div>
   );

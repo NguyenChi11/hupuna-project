@@ -1,9 +1,8 @@
 "use client";
 
-import { htmlToText } from "@/app/utils/converts";
+import { htmlToText } from "@/utils/converts";
 import dynamic from "next/dynamic";
 import React, { useState, useEffect } from "react";
-import "react-quill-new/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -16,7 +15,12 @@ type BaseEditorProps = {
   disabled?: boolean; // ✅ thêm prop disabled
 };
 
-export default function TextEditor({ value, onChange, placeholder, disabled = false }: BaseEditorProps) {
+export default function TextEditor({
+  value,
+  onChange,
+  placeholder,
+  disabled = false,
+}: BaseEditorProps) {
   const [editorValue, setEditorValue] = useState(value);
 
   useEffect(() => {
@@ -52,7 +56,12 @@ export default function TextEditor({ value, onChange, placeholder, disabled = fa
                   ["blockquote", "code-block"],
                   [{ color: [] }, { background: [] }],
                   [{ align: [] }],
-                  [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+                  [
+                    { list: "ordered" },
+                    { list: "bullet" },
+                    { indent: "-1" },
+                    { indent: "+1" },
+                  ],
                   ["link", "image", "video"],
                   ["clean"],
                 ],
