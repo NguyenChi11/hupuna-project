@@ -4,15 +4,15 @@ import React, {useState, useMemo, useEffect, useRef} from "react";
 import { CountCard } from "@/components/ui/_base/CountCard";
 import { DEFAULT_EMPLOYEES } from "@/lib/employment/data_employment";
 import { Employment, FilterConfig } from "@/types/employment";
-import {faPlus, faUsers} from "@fortawesome/free-solid-svg-icons";
+import { faPlus,faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ALL_COLUMNS } from "@/lib/employment/columns";
 import { Input } from "@/components/ui/_base/Input";
 import { FilterPopover } from "@/components/ui/base/FilterPopover";
 import { EmployeeTable } from "@/app/(main-layout)/employee-account/components/EmployeeTable";
 import dayjs from "dayjs";
-import {Button} from "@/components/ui/_base/Button";
 import Link from "next/link";
+import {Button} from "@/components/ui/_base/Button";
 
 const EmployeeAccountPage = () => {
     const [employees, setEmployee] = useState<Employment[]>(DEFAULT_EMPLOYEES);

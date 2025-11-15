@@ -18,7 +18,7 @@ export function RegionSelect({ id, value, onChange }: RegionSelectProps) {
       <SimpleSelect
         value={value}
         onChange={onChange}
-        options={REGIONS}
+        options={[...REGIONS]}
         placeholder="Chọn khu vực"
       />
     </div>

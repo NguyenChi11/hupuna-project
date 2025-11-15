@@ -15,7 +15,6 @@ export function ColumnSearchInput({ value, onChange }: ColumnSearchInputProps) {
       placeholder="Tìm kiếm cột hiển thị"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      iconLeft={<FontAwesomeIcon icon={faSearch} />}
     />
   );
 }

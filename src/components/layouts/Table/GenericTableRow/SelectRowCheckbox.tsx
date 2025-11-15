@@ -11,7 +11,7 @@ export function SelectRowCheckbox({
 }: SelectRowCheckboxProps) {
   return (
     <td className="px-4 py-4">
-      <Checkbox checked={checked} onChange={onChange} />
+      <Checkbox checked={checked} onChange={onChange} id={""} />
     </td>
   );
 }
