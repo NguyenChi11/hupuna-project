@@ -2,7 +2,7 @@
 import { GenericTable } from "@/components/layouts/GenericTable";
 import { Customer } from "@/types/customers";
 import { ALL_AVAILABLE_COLUMNS } from "@/lib/container_customers";
-import { CustomerTableRow } from "./CustomerTableRow";
+import { GenericTableRow } from "@/components/layouts/Table/GenericTableRow";
 
 const columns = Object.entries(ALL_AVAILABLE_COLUMNS).map(([key, label]) => ({
   key,
@@ -46,7 +46,7 @@ export function CustomerTable({
       onFiltersChange={onFiltersChange}
       onVisibleColumnsChange={onVisibleColumnsChange}
       renderRow={(customer, rowNumber, isSelected, onSelect) => (
-        <CustomerTableRow
+        <GenericTableRow
           key={customer.id}
           customer={customer}
           visibleColumns={visibleColumns}

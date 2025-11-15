@@ -9,11 +9,15 @@ import { CustomerBasicInfo } from "@/app/(main-layout)/customers/components/Cust
 import { CustomerAddressSection } from "@/app/(main-layout)/customers/components/CustomerAddressSection";
 import { CustomerProductInfo } from "@/app/(main-layout)/customers/components/CustomerProductInfo";
 import { SuccessScreen } from "@/app/(main-layout)/customers/components/SuccessScreen";
+import { Customer } from "@/types/customers";
 
 export default function AddCustomerPage() {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  // Lưu cả preview (blob) và file gốc
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string>("");
 
   const [formData, setFormData] = useState({
@@ -29,8 +33,11 @@ export default function AddCustomerPage() {
     advisor: "",
     email: "",
     customerStatus: "",
+    website: "",
+    taxCode: "",
+    lastPurchase: "",
     birthday: "",
-    avatar: "",
+    avatarUrl: "", // ← SẼ ĐƯỢC TẠO KHI CONFIRM
     status: [] as {
       key: string;
       label: string;
@@ -41,23 +48,14 @@ export default function AddCustomerPage() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleInputChange = (field: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setAvatarPreview(base64String);
-        handleInputChange("avatar", base64String);
-      };
-      reader.readAsDataURL(file);
-    }
+  // Chỉ cập nhật preview + lưu file tạm
+  const handleAvatarUpload = (file: File | null, previewUrl: string) => {
+    setAvatarFile(file);
+    setAvatarPreview(previewUrl);
+    // KHÔNG cập nhật avatarUrl ở đây → chỉ khi confirm
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -67,9 +65,13 @@ export default function AddCustomerPage() {
 
   const handleConfirm = () => {
     setShowConfirm(false);
-    setShowSuccess(true);
 
-    const newCustomer = {
+    // CHỈ TẠO avatarUrl KHI CONFIRM
+    const finalAvatarUrl = avatarFile
+      ? `/uploads/avatar-${Date.now()}.jpg`
+      : "";
+
+    const newCustomer: Customer = {
       id: String(Date.now()),
       customerId: formData.customerId || `KH${String(Date.now()).slice(-6)}`,
       name: formData.name,
@@ -81,7 +83,7 @@ export default function AddCustomerPage() {
       consultant: formData.consultant,
       zaloConsultant: formData.zaloConsultant,
       advisor: formData.advisor,
-      avatar: formData.avatar,
+      avatarUrl: finalAvatarUrl, // ← TẠO TẠI ĐÂY
       customerSegment: "Mới",
       customerStatus: formData.customerStatus,
       status: formData.status,
@@ -89,9 +91,14 @@ export default function AddCustomerPage() {
       birthday: formData.birthday,
       createdDate: new Date().toISOString().split("T")[0],
       lastContact: new Date().toISOString().split("T")[0],
+      website: formData.website || "",
+      taxCode: formData.taxCode || "",
+      lastPurchase: formData.lastPurchase || "",
     };
 
+    // LƯU CHỈ KHI CONFIRM
     sessionStorage.setItem("newCustomer", JSON.stringify(newCustomer));
+    setShowSuccess(true);
   };
 
   if (showSuccess) {
@@ -104,18 +111,20 @@ export default function AddCustomerPage() {
     );
   }
 
+  console.log("Form Data:", formData);
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-6 py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Avatar */}
+          {/* PREVIEW DÙNG BLOB */}
           <CustomerAvatarSection
-            avatarPreview={avatarPreview}
-            customerName={formData.name}
-            onAvatarChange={handleAvatarChange}
+            avatarPreview={avatarPreview} // blob: URL
+            customerName={formData.name || "Khách hàng"}
+            onUploaded={handleAvatarUpload}
+            isEditMode={false}
           />
 
-          {/* Basic Info */}
           <CustomerBasicInfo
             customerId={formData.customerId}
             name={formData.name}
@@ -125,7 +134,6 @@ export default function AddCustomerPage() {
             onInputChange={handleInputChange}
           />
 
-          {/* Address */}
           <CustomerAddressSection
             address={formData.address}
             region={formData.region}
@@ -133,7 +141,6 @@ export default function AddCustomerPage() {
             onInputChange={handleInputChange}
           />
 
-          {/* Product Info */}
           <CustomerProductInfo
             productGroup={formData.productGroup}
             consultant={formData.consultant}
@@ -143,27 +150,17 @@ export default function AddCustomerPage() {
             onInputChange={handleInputChange}
           />
 
-          {/* Action Buttons */}
           <div className="flex gap-4 justify-end pt-4">
             <button
               type="button"
               onClick={() => router.back()}
-              className={`
-                px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700
-                hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#111164]/20
-                active:scale-[0.98] transition-all duration-200
-              `}
+              className="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#111164]/20 active:scale-[0.98] transition-all duration-200"
             >
               Hủy
             </button>
-
             <button
               type="submit"
-              className={`
-                px-5 py-2.5 rounded-lg bg-blue-600 text-sm font-medium text-white
-                hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50
-                active:scale-[0.98] transition-all duration-200
-              `}
+              className="px-5 py-2.5 rounded-lg bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 active:scale-[0.98] transition-all duration-200"
             >
               Thêm khách hàng
             </button>
@@ -171,14 +168,14 @@ export default function AddCustomerPage() {
         </form>
       </div>
 
-      {/* Confirmation Dialog */}
+      {/* Confirm Dialog */}
       {showConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setShowConfirm(false)}
           />
-          <div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl p-6 animate-in fade-in zoom-in-95">
+          <div className="relative w-full max-w-md bg-white rounded-xl shadow-2xl p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
                 Xác nhận thêm khách hàng
@@ -193,12 +190,10 @@ export default function AddCustomerPage() {
                 />
               </button>
             </div>
-
             <p className="text-sm text-gray-600 mb-6">
               Bạn có chắc chắn muốn thêm khách hàng{" "}
               <strong>{formData.name}</strong>?
             </p>
-
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowConfirm(false)}

@@ -33,7 +33,7 @@ export function InputField({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        hasError={hasError}
+        className={hasError ? "border-red-500" : ""}
       />
     </div>
   );

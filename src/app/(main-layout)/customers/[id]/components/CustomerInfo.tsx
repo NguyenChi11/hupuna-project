@@ -1,210 +1,166 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPhone,
-  faMapMarkerAlt,
-  faEnvelope,
-} from "@fortawesome/free-solid-svg-icons";
+  useSearchParams,
+  useRouter,
+  usePathname,
+  useParams,
+} from "next/navigation";
 import { useEffect, useState } from "react";
 import { Customer } from "@/types/customers";
 import { DEFAULT_CUSTOMERS } from "@/lib/data_customers";
-import Image from "next/image";
+
+import HeaderSection from "./SectionInfo/HeaderSection";
+import ProgressBar from "./SectionInfo/ProgressBar";
+import QuickInfoCard from "./SectionInfo/QuickInfoCard";
+import StatusBadge from "./SectionInfo/StatusBadge";
+import ResponsiblePerson from "./SectionInfo/ResponsiblePerson";
+import TabsSection from "./SectionInfo/TabsSection";
+import SourceInfo from "./SectionInfo/SourceInfo";
+import MainInfo from "./SectionInfo/MainInfo";
+import OtherInfo from "./SectionInfo/OtherInfo";
+import ActionButtons from "./SectionInfo/ActionButtons";
+
+import ExchangeTab from "./SectionInfo/ExchangeTab";
+import FeedbackTab from "./SectionInfo/FeedbackTab";
+import TransactionTab from "./SectionInfo/TransactionTab";
+import AppointmentTab from "./SectionInfo/AppointmentTab";
+import OpportunityTab from "./SectionInfo/OpportunityTab";
+import ReferralTab from "./SectionInfo/ReferralTab";
+
+const innerTabs = [
+  { key: "exchange", label: "Trao đổi" },
+  { key: "feedback", label: "Khách hàng phản hồi" },
+  { key: "transaction", label: "Giao dịch" },
+  { key: "appointment", label: "Lịch hẹn" },
+  { key: "opportunity", label: "Cơ hội" },
+  { key: "referral", label: "Giới thiệu" },
+];
 
 interface CustomerInfoProps {
   id: string;
 }
 
 export default function CustomerInfo({ id }: CustomerInfoProps) {
-  const params = useParams();
   const router = useRouter();
-  const [allCustomers, setAllCustomers] =
-    useState<Customer[]>(DEFAULT_CUSTOMERS);
+  const pathname = usePathname();
+  const params = useParams();
+  const searchParams = useSearchParams();
+
+  const customerId = params.id as string;
+
+  const activeTab = searchParams.get("subtab") || "exchange";
+
+  const changeTab = (tab: string) => {
+    const p = new URLSearchParams(searchParams.toString());
+    p.set("subtab", tab);
+    router.push(`${pathname}?${p.toString()}`, { scroll: false });
+  };
+
+  const [customers, setCustomers] = useState<Customer[]>(DEFAULT_CUSTOMERS);
 
   useEffect(() => {
     const newCustomer = sessionStorage.getItem("newCustomer");
     if (newCustomer) {
-      try {
-        const parsedCustomer = JSON.parse(newCustomer);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setAllCustomers((prev) => [parsedCustomer, ...prev]);
-        sessionStorage.removeItem("newCustomer");
-      } catch (error) {
-        console.error("Failed to parse new customer:", error);
-      }
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCustomers((prev) => [JSON.parse(newCustomer), ...prev]);
+      sessionStorage.removeItem("newCustomer");
     }
 
     const editedCustomers = sessionStorage.getItem("editedCustomers");
     if (editedCustomers) {
       const editedData = JSON.parse(editedCustomers);
-      setAllCustomers((prev) =>
-        prev.map((customer) => editedData[customer.id] || customer)
-      );
+      setCustomers((prev) => prev.map((c) => editedData[c.id] || c));
     }
   }, []);
 
-  const customerId = params.id as string;
-  const customer = allCustomers.find((c) => c.id === customerId);
+  const customer = customers.find((c) => c.id === customerId);
 
   if (!customer) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="text-center py-12">
-          <p className="text-gray-500">Không tìm thấy thông tin khách hàng</p>
-        </div>
+      <div className="p-6 text-center">
+        <p className="text-gray-500">Không tìm thấy khách hàng</p>
       </div>
     );
   }
 
+  // % hoàn thiện hồ sơ
+  const completionFields = [
+    customer.email,
+    customer.birthday,
+    customer.address,
+    customer.website,
+    customer.taxCode,
+    customer.lastPurchase,
+  ].filter(Boolean).length;
+  const progress = Math.round((completionFields / 6) * 100);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto p-6">
-        {/* Customer Card */}
-        <div className="bg-white border border-gray-200 rounded-lg p-8 space-y-6 shadow-sm">
-          <div className="flex items-start gap-6">
-            {/* Avatar */}
-            <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gray-200 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
-                {customer.avatar ? (
-                  <Image
-                    src={customer.avatar}
-                    alt={customer.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-3xl font-bold text-gray-600">
-                    {customer.name.charAt(0).toUpperCase()}
-                  </span>
-                )}
-              </div>
-            </div>
+    <div className="w-full mx-auto flex gap-6">
+      {/* LEFT PANEL */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4 w-2/5 space-y-6 shadow-sm h-150 overflow-y-auto">
+        <HeaderSection customer={customer} />
+        <ProgressBar progress={progress} />
+        <QuickInfoCard customer={customer} />
 
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {customer.name}
-              </h1>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-medium">
-                  {customer.customerSegment}
-                </span>
-                <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
-                  {customer.productGroup}
-                </span>
-                <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-medium">
-                  {customer.region}
-                </span>
-              </div>
-            </div>
+        <div className="flex items-center justify-between">
+          <StatusBadge status={customer.customerStatus} />
+          <ResponsiblePerson consultant={customer.consultant} />
+        </div>
+
+        <TabsSection customer={customer} />
+        <SourceInfo customer={customer} />
+        <MainInfo customer={customer} />
+        <OtherInfo customer={customer} />
+
+        <ActionButtons onEdit={() => changeTab("exchange")} />
+      </div>
+
+      {/* RIGHT PANEL */}
+      <div className="bg-white border border-gray-200 rounded-lg w-3/5 p-4 shadow-sm">
+        {/* Sub Tabs */}
+        <div className="border-b border-gray-200 px-6">
+          <nav className="flex space-x-8">
+            {innerTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => changeTab(tab.key)}
+                className={`py-3 px-1 border-b-2 font-medium text-sm transition-all ${
+                  activeTab === tab.key
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* CONTENT */}
+        <div className="p-6 min-h-96">
+          <div className={activeTab === "exchange" ? "block" : "hidden"}>
+            <ExchangeTab customer={customer} />
           </div>
 
-          {/* Contact & Business Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-gray-200 pt-6">
-            {/* Contact */}
-            <div className="space-y-5">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Thông tin liên hệ
-              </h2>
-
-              <div className="flex items-start gap-3">
-                <FontAwesomeIcon
-                  icon={faPhone}
-                  className="h-5 w-5 text-indigo-600 mt-0.5"
-                />
-                <div>
-                  <p className="text-sm text-gray-500">Điện thoại</p>
-                  <p className="text-gray-900 font-medium">{customer.phone}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <FontAwesomeIcon
-                  icon={faEnvelope}
-                  className="h-5 w-5 text-indigo-600 mt-0.5"
-                />
-                <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="text-gray-900 font-medium">
-                    {customer.email || "-"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <FontAwesomeIcon
-                  icon={faMapMarkerAlt}
-                  className="h-5 w-5 text-indigo-600 mt-0.5"
-                />
-                <div>
-                  <p className="text-sm text-gray-500">Địa chỉ</p>
-                  <p className="text-gray-900 font-medium">
-                    {customer.address}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Business Info */}
-            <div className="space-y-5">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Thông tin kinh doanh
-              </h2>
-
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Nhân viên tư vấn</p>
-                <p className="text-gray-900 font-medium">
-                  {customer.consultant}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm text-gray-500 mb-1">
-                  Yêu cầu của khách hàng
-                </p>
-                <p className="text-gray-900 font-medium">
-                  {customer.requirements}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Nhóm sản phẩm</p>
-                <p className="text-gray-900 font-medium">
-                  {customer.productGroup}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Tình trạng</p>
-                <p className="text-gray-900 font-medium">
-                  {customer.customerStatus}
-                </p>
-              </div>
-            </div>
+          <div className={activeTab === "feedback" ? "block" : "hidden"}>
+            <FeedbackTab customer={customer} />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 border-t border-gray-200 pt-6">
-            <button
-              onClick={() => router.push(`/customers/${customerId}/edit`)}
-              className="
-                inline-flex items-center justify-center h-10 px-6 py-2 rounded-md
-                bg-blue-600 text-white text-sm font-medium
-                hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-                transition-all duration-200 active:scale-98 cursor-pointer
-              "
-            >
-              Chỉnh sửa
-            </button>
-            <button
-              className="
-                inline-flex items-center justify-center h-10 px-6 py-2 rounded-md
-                border border-gray-300 bg-white text-sm font-medium text-gray-700
-                hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2
-                transition-all duration-200 cursor-pointer
-              "
-            >
-              Xóa
-            </button>
+          <div className={activeTab === "transaction" ? "block" : "hidden"}>
+            <TransactionTab customer={customer} />
+          </div>
+
+          <div className={activeTab === "appointment" ? "block" : "hidden"}>
+            <AppointmentTab customer={customer} />
+          </div>
+
+          <div className={activeTab === "opportunity" ? "block" : "hidden"}>
+            <OpportunityTab customer={customer} />
+          </div>
+
+          <div className={activeTab === "referral" ? "block" : "hidden"}>
+            <ReferralTab customer={customer} />
           </div>
         </div>
       </div>

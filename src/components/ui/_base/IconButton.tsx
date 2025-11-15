@@ -17,7 +17,7 @@ export function IconButton({
 }: IconButtonProps) {
   return (
     <Button
-      variant="icon"
+      variant="secondary"
       onClick={onClick}
       disabled={disabled}
       aria-label={props["aria-label"]}

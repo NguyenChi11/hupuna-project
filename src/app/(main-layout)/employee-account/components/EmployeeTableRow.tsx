@@ -21,6 +21,7 @@ export function EmployeeTableRow({
             {/* Checkbox */}
             {visibleColumns.checkbox && (
                 <RowCheckbox
+                    rowId={employee.id}
                     checked={isSelected}
                     onChange={() => onSelectRow(employee.id)}
                 />
@@ -33,13 +34,13 @@ export function EmployeeTableRow({
             {Object.entries(visibleColumns).map(([key, isVisible]) => {
                 if (!isVisible || key === "checkbox" || key === "stt") return null;
 
-                if (key === "name") {
+                if (key === "fullName") {
                     return (
                         <NameWithAvatarCell
                             key={key}
                             name={employee.fullName || "-"}
                             // avatar={employee.avatar}
-                            href={`/customers/${employee.id}`}
+                            href={`/employee-account/${employee.id}`}
                         />
                     );
                 }

@@ -149,38 +149,41 @@ export function FilterPopover({ onApply, onClear, currentFilters }: FilterPopove
             align="left"
             direction="top"
         >
-            <div className="w-80 p-4 space-y-4">
-                <h3 className="font-semibold text-sm">Bộ lọc</h3>
+            <div className="w-full h-screen ">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    <h3 className="font-semibold text-sm overflow-y-auto">Bộ lọc</h3>
 
-                {Object.entries(ALL_COLUMNS)
-                    .filter(([_, col]) => col.filterable ?? false)
-                    .map(([key, col]) => {
-                        const options = col.filterType === "select" ? getOptions(key as keyof Employment) : [];
+                    {Object.entries(ALL_COLUMNS)
+                        .filter(([_, col]) => col.filterable ?? false)
+                        .map(([key, col]) => {
+                            const options = col.filterType === "select" ? getOptions(key as keyof Employment) : [];
 
-                        // Tạo object nhỏ chỉ chứa field cần cho filter
-                        const filterCol: FilterColumn = {
-                            title: col.title,
-                            filterType: col.filterType,
-                            filterable: col.filterable,
-                        };
+                            // Tạo object nhỏ chỉ chứa field cần cho filter
+                            const filterCol: FilterColumn = {
+                                title: col.title,
+                                filterType: col.filterType,
+                                filterable: col.filterable,
+                            };
 
-                        return (
-                            <div key={key}>
-                                <label className="text-xs font-medium text-gray-600 block mb-1">
-                                    {typeof col.title === "string" ? col.title : key}
-                                </label>
-                                <FilterInput
-                                    col={filterCol}
-                                    fieldKey={key}
-                                    value={tempFilters[key] ?? ""}
-                                    onChange={handleChange}
-                                    options={options}
-                                />
-                            </div>
-                        );
-                    })}
+                            return (
+                                <div key={key}>
+                                    <label className="text-xs font-medium text-gray-600 block mb-1">
+                                        {typeof col.title === "string" ? col.title : key}
+                                    </label>
+                                    <FilterInput
+                                        col={filterCol}
+                                        fieldKey={key}
+                                        value={tempFilters[key] ?? ""}
+                                        onChange={handleChange}
+                                        options={options}
+                                    />
+                                </div>
+                            );
+                        })}
 
-                <div className="flex gap-2 pt-2">
+
+                </div>
+                <div className="sticky bottom-0 left-0 bg-white pt-2 border-t flex gap-2">
                     <Button variant="primary" className="flex-1" onClick={handleApply}>
                         Áp dụng
                     </Button>
@@ -189,6 +192,7 @@ export function FilterPopover({ onApply, onClear, currentFilters }: FilterPopove
                     </Button>
                 </div>
             </div>
+
         </Popover>
     );
 }

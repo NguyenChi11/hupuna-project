@@ -26,7 +26,12 @@ export function SearchInput({ onSearch }: SearchInputProps) {
     <div className="mt-4">
       <Input
         placeholder="Tìm khách hàng..."
-        icon={<FontAwesomeIcon icon={faMagnifyingGlass} className="h-4 w-4" />}
+        icon={
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            className="h-4 w-4 shrink-0 flex items-center justify-center"
+          />
+        }
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         className="sm:w-64"

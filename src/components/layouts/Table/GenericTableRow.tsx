@@ -1,12 +1,11 @@
-"use client";
-
+// @/components/layouts/Table/GenericTableRow/GenericTableRow.tsx
 import { DefaultCell } from "@/components/layouts/Table/GenericTableRow/DefaultCell";
 import { NameWithAvatarCell } from "@/components/layouts/Table/GenericTableRow/NameWithAvatarCell";
 import { RowCheckbox } from "@/components/layouts/Table/GenericTableRow/RowCheckbox";
 import { SerialNumberCell } from "@/components/layouts/Table/GenericTableRow/SerialNumberCell";
 import { CustomerTableRowProps } from "@/types/customers";
 
-export function CustomerTableRow({
+export function GenericTableRow({
   customer,
   visibleColumns,
   rowNumber,
@@ -20,18 +19,16 @@ export function CustomerTableRow({
       className="border-b border-gray-200 transition-all duration-300 group"
       style={{ borderLeft: `6px solid ${statusColor}` }}
     >
-      {/* Checkbox */}
       {visibleColumns.checkbox && (
         <RowCheckbox
+          rowId={customer.id}
           checked={isSelected}
           onChange={() => onSelectRow(customer.id)}
         />
       )}
 
-      {/* STT */}
       {visibleColumns.stt && <SerialNumberCell number={rowNumber} />}
 
-      {/* Các cột động */}
       {Object.entries(visibleColumns).map(([key, isVisible]) => {
         if (!isVisible || key === "checkbox" || key === "stt") return null;
 
@@ -40,7 +37,7 @@ export function CustomerTableRow({
             <NameWithAvatarCell
               key={key}
               name={customer.name || "-"}
-              avatar={customer.avatar}
+              avatar={customer.avatarUrl} // ← ĐÚNG
               href={`/customers/${customer.id}`}
             />
           );

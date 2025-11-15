@@ -14,21 +14,41 @@ export function GenericTableHeader({
   isAllSelected,
   onSelectAll,
 }: GenericTableHeaderProps) {
+  const handleSelectAll = () => {
+    onSelectAll(!isAllSelected);
+  };
+
   return (
     <thead>
       <tr className="bg-gray-50 border-b border-gray-200">
+        {/* Checkbox cột chọn tất cả */}
         {visibleColumns.checkbox && (
           <th className="px-4 py-3 text-left w-12">
             <Checkbox
+              id="select-all"
               checked={isAllSelected}
-              onChange={(e) => onSelectAll(e.target.checked)}
+              onChange={handleSelectAll}
             />
           </th>
         )}
-        {visibleColumns.stt && <TableCell>STT</TableCell>}
-        {Object.entries(visibleColumns).map(([key, visible]) => {
-          if (!visible || key === "checkbox" || key === "stt") return null;
-          return <TableCell key={key}>{allColumns[key]}</TableCell>;
+
+        {/* Cột STT */}
+        {visibleColumns.stt && (
+          <TableCell className="font-medium text-gray-900">STT</TableCell>
+        )}
+
+        {/* Các cột còn lại */}
+        {Object.entries(allColumns).map(([key, label]) => {
+          const isVisible = visibleColumns[key];
+          const isSpecial = key === "checkbox" || key === "stt";
+
+          if (!isVisible || isSpecial) return null;
+
+          return (
+            <TableCell key={key} className="font-medium text-gray-900">
+              {label}
+            </TableCell>
+          );
         })}
       </tr>
     </thead>

@@ -15,6 +15,7 @@ interface SelectProps {
   options: SelectOption[];
   placeholder?: string;
   className?: string;
+  dropdownClassName?: string;
   disabled?: boolean;
 }
 
@@ -24,6 +25,7 @@ export function Select({
   options = [],
   placeholder = "Chọn một mục",
   className,
+  dropdownClassName,
   disabled = false,
 }: SelectProps) {
   const [open, setOpen] = useState(false);
@@ -95,13 +97,16 @@ export function Select({
       {open && (
         <div
           ref={dropdownRef}
-          className="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg max-h-60 overflow-y-auto"
+          className={cn(
+            "absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg max-h-60 overflow-y-auto",
+            dropdownClassName // ← Dùng class từ ngoài, override nếu cần
+          )}
         >
           {options.map((opt) => (
             <button
               key={opt.value}
               onClick={() => {
-                onValueChange(opt.value); // <-- FIX: luôn trả value đúng
+                onValueChange(opt.value);
                 setOpen(false);
               }}
               className={cn(

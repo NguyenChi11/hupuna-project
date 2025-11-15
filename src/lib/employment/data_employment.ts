@@ -29,7 +29,9 @@ export const DEFAULT_EMPLOYEES: Employment[] = [
     bankAccount: "VPB123456789",
     taxCode: "TAX001",
     insuranceNumber: "BHXH001",
-    status: [{ key: "active", label: "Đang làm", bgColor: "#d1fae5", textColor: "#065f46" }],
+    status: [
+        { key: "active", label: "Đang làm", bgColor: "#d1fae5", textColor: "#065f46" }
+    ],
   },
   {
     id: "2",
