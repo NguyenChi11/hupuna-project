@@ -40,9 +40,9 @@ export function CustomerTableFooter({
         />
 
         <ItemsPerPageSelect
-          value={itemsPerPage}
+          value={String(itemsPerPage)}
           onChange={(count) => {
-            onItemsPerPageChange(count);
+            onItemsPerPageChange(Number(count));
             onPageChange(1);
           }}
         />

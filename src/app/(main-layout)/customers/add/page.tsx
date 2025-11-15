@@ -33,6 +33,9 @@ export default function AddCustomerPage() {
     advisor: "",
     email: "",
     customerStatus: "",
+    website: "",
+    taxCode: "",
+    lastPurchase: "",
     birthday: "",
     avatarUrl: "", // ← SẼ ĐƯỢC TẠO KHI CONFIRM
     status: [] as {
@@ -88,6 +91,9 @@ export default function AddCustomerPage() {
       birthday: formData.birthday,
       createdDate: new Date().toISOString().split("T")[0],
       lastContact: new Date().toISOString().split("T")[0],
+      website: formData.website || "",
+      taxCode: formData.taxCode || "",
+      lastPurchase: formData.lastPurchase || "",
     };
 
     // LƯU CHỈ KHI CONFIRM

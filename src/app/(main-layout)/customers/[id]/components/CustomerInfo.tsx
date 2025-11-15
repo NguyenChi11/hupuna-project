@@ -37,7 +37,11 @@ const innerTabs = [
   { key: "referral", label: "Giới thiệu" },
 ];
 
-export default function CustomerInfo() {
+interface CustomerInfoProps {
+  id: string;
+}
+
+export default function CustomerInfo({ id }: CustomerInfoProps) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();

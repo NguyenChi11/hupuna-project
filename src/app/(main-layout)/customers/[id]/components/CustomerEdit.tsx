@@ -99,8 +99,9 @@ export default function CustomerEdit({ id }: CustomerEditProps) {
             avatarPreview={avatarPreview}
             customerName={formData.name}
             onUploaded={(url) => {
-              setAvatarPreview(url);
-              handleInputChange("avatar", url);
+              const safeUrl = typeof url === "string" ? url : "";
+              setAvatarPreview(safeUrl);
+              handleInputChange("avatar", safeUrl);
             }}
             isEditMode
           />
